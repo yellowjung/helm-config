@@ -1,0 +1,13 @@
+## TODO: namespace 입력값
+stages:
+  - deploy
+
+deploy_to_argocd:
+  stage: deploy
+  image: argoproj/argocd:latest
+  script:
+    - argocd login $ARGOCD_SERVER --username $ARGOCD_USER --password $ARGOCD_PASSWORD --insecure
+    - argocd app create testapp1 --repo ${CI_PROJECT_URL}.git --path testapp1 --dest-server $K8S_SERVER --dest-namespace asdf
+    - argocd app sync testapp1
+  only:
+    - master
